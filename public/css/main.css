@@ -1,0 +1,36 @@
+
+body{
+
+  background-color: aqua;  
+}
+
+img{
+
+    width: 100%;
+}
+
+.wrapper{
+
+display: grid;
+place-items: center;
+height: 100vh;
+text-align: center;
+text-decoration: none;
+margin: 4px 2px;
+font-style: 16px;
+display: inline-block;
+border-radius: 3px;
+cursor: pointer;
+width: 100%;
+}
+
+.btn-primary{
+    background-color: #008CBA;
+}
+
+
+.card{
+    text-align: center;
+    margin: 0 auto;
+    width: 400px;
+}
