@@ -4,9 +4,9 @@ body{
   background-color: aqua;  
 }
 
-img{
+.img{
 
-    width: 100%;
+    width: 50px;
 }
 
 .wrapper{
@@ -23,10 +23,31 @@ border-radius: 3px;
 cursor: pointer;
 width: 100%;
 }
+.my{
+    
+    place-items: center;
+}
+
 
 .btn-primary{
     background-color: #008CBA;
 }
+
+.center {
+    /* margin: auto; */
+    width: 50%;
+    border: 3px solid green;
+    padding: 10px;
+   /* display: block; */
+    margin-top: 300px;
+    margin-left: auto;
+    margin-right: auto;
+  
+    /* float: left; */
+    text-align: center;
+
+
+  }
 
 
 .card{
@@ -34,3 +55,4 @@ width: 100%;
     margin: 0 auto;
     width: 400px;
 }
+
