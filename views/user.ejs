@@ -14,10 +14,33 @@
         Name: <%= user[0].u_name %>
     </h1>
 
-    <img src="<%= user[0].image %>" class="img" alt="<%= user[0].u_name %>">
-    <p>"<%= user[0].dob %> "</p> 
-      <h2> Mobile: <%= user[0].mobile%></h2>
-      <h3> Address: <%= user[0].p_address%></h3> 
+    <div>
+
+
+        <img src="http://localhost:3000/<%= user[0].image %>" class="img" alt="<%= user[0].u_name %>">
+    </div>
+
+    <p>"<%= user[0].dob %> "</p>
+    <h2> Mobile: <%= user[0].mobile%>
+    </h2>
+    <h3> Address: <%= user[0].p_address%>
+    </h3>
+
+    <% if (products.length==0) { %>
+        <form action="" method="post">
+            <button type="submit">Apply</button>
+        </form>
+        <% } else { %>
+<h1> <strong> License number is <%= products[0].lc_no %>   </strong>   </h1>
+<h1> <strong> License Type is <%= products[0].lc_type %>   </strong>   </h1>
+
+
+
+
+        <% } %>
+ 
+
+
 
 </body>
 

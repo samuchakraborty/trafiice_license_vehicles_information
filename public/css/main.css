@@ -5,8 +5,8 @@ body{
 }
 
 .img{
-
-    width: 50px;
+image-orientation: center;
+    width: 150px;
 }
 
 .wrapper{

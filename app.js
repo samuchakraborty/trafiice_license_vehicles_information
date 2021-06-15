@@ -59,49 +59,14 @@ app.post("/home", (req, res) => {
               '", "' +
               nid +
               '")';
-              console.log(sql);
+            console.log(sql);
             connection.query(sql, (err, rows) => {
               //res.send(rows);
               if (!err) {
-                pool.getConnection((err, connection) => {
-                  if (!err) {
-                    const sql =
-                      'SELECT user.u_name, user.mobile, user.id, nid.image, nid.p_address, nid.dob FROM user RIGHT JOIN nid ON nid.n_id = user.n_id WHERE user.n_id ="'+nid+'"';
-                    console.log(sql);
-                    connection.query(sql, (err, rows) => {
-                      connection.release();
-                      if (!err) {
-                        console.log(rows[0].image);
-                        // res.send(rows);
-                        res.render("user", { user: rows });
-                        connection.destroy();
-                      } else {
-                        console.log(err);
-                      }
-                    });
-                  }
-                });
+                res.redirect("/userProfile/" + nid);
               } else {
                 console.log(err);
               }
-
-              //  res.render("user", { user: rows });
-              // pool.getConnection((err, connection) => {
-              //   if (!err) {
-              //     let sql= "SELECT user.u_name, user.mobile, user.id, nid.image, nid.p_address, nid.dob FROM user RIGHT JOIN nid ON nid.n_id = user.n_id WHERE user.n_id="+ nid;
-              //     connection.query(sql, (err, rows) => {
-              //       connection.release();
-              //       if (!err) {
-              //         console.log(rows);
-              //        // res.send(rows);
-              //        res.render("user", { user: rows });
-              //       } else {
-              //         console.log(err);
-              //       }
-              //     });
-
-              //   }
-              // });
             });
           } else {
             res.json({
@@ -118,20 +83,45 @@ app.post("/home", (req, res) => {
 });
 
 app.get("/userProfile/:nid", (req, res) => {
-  console.log('ami');
+  console.log("ami");
   console.log(req.params.nid);
   pool.getConnection((err, connection) => {
     if (!err) {
       const sql =
-        'SELECT user.u_name, user.mobile, user.id, nid.image, nid.p_address, nid.dob FROM user RIGHT JOIN nid ON nid.n_id = user.n_id WHERE user.n_id ="'+req.params.nid+'"';
+        'SELECT user.u_name, user.mobile, user.id, nid.image, nid.p_address, nid.dob FROM user RIGHT JOIN nid ON nid.n_id = user.n_id WHERE user.n_id ="' +
+        req.params.nid +
+        '"';
       console.log(sql);
       connection.query(sql, (err, rows) => {
         connection.release();
         if (!err) {
-          console.log(rows[0].image);
+          //console.log(rows[0].image);
           // res.send(rows);
-          res.render("user", { user: rows });
-          connection.destroy();
+          // res.send(rows);
+
+          // res.send(rows);
+
+          const sql2 =
+            "SELECT * FROM user RIGHT JOIN license ON user.id = license.u_id WHERE user.id =1";
+          console.log(sql2);
+          connection.query(sql2, (err, row6) => {
+            // connection.release();
+            if (!err) {
+              console.log(row6);
+              res.render("user", { user: rows, products: row6 });
+              // if (row6.length != 0) {
+              //   console.log(row6[0].lc_status !== "Active");
+              // } else {
+              //   res.send("you have no license yet");
+              // }
+            } else {
+              console.log("license");
+              console.log(err);
+            }
+
+            //res.render("user", { user: rows });
+            connection.destroy();
+          });
         } else {
           console.log(err);
         }
