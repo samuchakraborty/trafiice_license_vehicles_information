@@ -5,14 +5,15 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign UP</title>
+    <title>Sign In</title>
     <link rel="stylesheet" href="/css/main.css">
 </head>
 
 <body>
-    <h1>Sign Up Page</h1>
+
+    <h1>Sign In Page</h1>
     <div class="center">
-        <form action="/home" method="post">
+        <form action="/signInpage" method="POST">
             <label for="mobile">Mobile : </label>
             <input type="text" name="mobile">
             <br><br>
@@ -21,17 +22,14 @@
             <input type="text" name="password">
             <br><br>
 
-            <label for="nid_value">NID Number :</label>
-            <input type="text" name="nid_value">
-            <br><br>
-            <button class="btn-primary" type="submit"> Sign UP</button>
+            <button class="btn-primary" type="submit"> Sign In</button>
 
         </form>
 
-        <form action="signIn" method="GET">
+        <form action="/" method="GET">
 
-            <h1>Already Sign in</h1>
-            <button class="btn-primary">SIGN IN</button>
+            <h1> Sign Up</h1>
+            <button class="btn-primary">SIGN UP</button>
         </form>
 
 

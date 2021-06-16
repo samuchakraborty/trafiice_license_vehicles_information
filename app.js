@@ -82,6 +82,43 @@ app.post("/home", (req, res) => {
   });
 });
 
+app.post("/signInpage", (req, res) => {
+  const mobile = req.body.mobile;
+  const password = req.body.password;
+  console.log(req.body);
+  //console.log("SELECT * FROM user WHERE mobile = '1837789993' AND password ='something' ");
+  const sqlforSignIn =
+    'SELECT * FROM user where mobile="' +
+    mobile +
+    '" AND password= "' +
+    password +
+    '"';
+  // console.log(sqlforSignIn);
+  pool.getConnection((err, connection) => {
+    connection.query(sqlforSignIn, (err, result) => {
+      if (!err) {
+        console.log(result);
+
+        if (result.length != 0) {
+          res
+            .status(200)
+            .json({ message: "you successfully login", data: result[0].n_id });
+          // res.redirect("/userProfile/" + result[0].n_id);
+
+        } else {
+          res.status(200).send("yoy have no right excess");
+        }
+      } else {
+        console.log(err);
+      }
+    });
+  });
+});
+
+app.get("/signIn", (req, res) => {
+  res.render("signin");
+});
+
 app.get("/userProfile/:nid", (req, res) => {
   console.log("ami");
   console.log(req.params.nid);
