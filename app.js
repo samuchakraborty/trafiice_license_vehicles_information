@@ -100,10 +100,10 @@ app.post("/signInpage", (req, res) => {
         console.log(result);
 
         if (result.length != 0) {
-          res
-            .status(200)
-            .json({ message: "you successfully login", data: result[0].n_id });
-          // res.redirect("/userProfile/" + result[0].n_id);
+          // res
+          //   .status(200)
+          //   .json({ message: "you successfully login", data: result[0].n_id });
+           res.redirect("/userProfile/" + result[0].n_id);
 
         } else {
           res.status(200).send("yoy have no right excess");
@@ -139,14 +139,21 @@ app.get("/userProfile/:nid", (req, res) => {
           // res.send(rows);
 
           const sql2 =
-            "SELECT * FROM user RIGHT JOIN license ON user.id = license.u_id WHERE user.id =1";
+            "SELECT * FROM user RIGHT JOIN license ON user.id = license.u_id WHERE user.id ="+ rows[0].id;
           console.log(sql2);
           connection.query(sql2, (err, row6) => {
             // connection.release();
             if (!err) {
-              console.log(row6);
+              console.log(rows);
               res.render("user", { user: rows, products: row6 });
-              // if (row6.length != 0) {
+              // res.json({
+
+              //   userInformation: rows[0],
+              //   licenseInformation: row6[0]
+
+              // });
+             
+             // if (row6.length != 0) {
               //   console.log(row6[0].lc_status !== "Active");
               // } else {
               //   res.send("you have no license yet");
