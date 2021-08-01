@@ -14,7 +14,7 @@ const pool = require('./database/database.js');
 
 
 app.get("", (req, res) => {
-  res.render("home");
+ // res.render("home");
 });
 
 app.post("/home", user.signUpForUser);
