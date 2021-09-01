@@ -45,6 +45,13 @@ exports.getUserInformation = (req, res) => {
         }
       });
     }
+else{
+console.log('not connected');
+      console.log(err);
+      
+}
+
+
   });
 };
 
