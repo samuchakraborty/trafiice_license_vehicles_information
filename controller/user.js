@@ -22,7 +22,7 @@ exports.getUserInformation = (req, res) => {
           console.log(sql2);
           connection.query(sql2, (err, row6) => {
             // connection.release();
-              
+
             if (!err) {
               // console.log(rows);
               // res.render("user", { user: rows, products: row6 });
@@ -44,14 +44,10 @@ exports.getUserInformation = (req, res) => {
           console.log(err);
         }
       });
-    }
-else{
-console.log('not connected');
+    } else {
+      console.log("not connected");
       console.log(err);
-      
-}
-
-
+    }
   });
 };
 
@@ -76,7 +72,7 @@ exports.signInForUser = (req, res) => {
           res
             .status(200)
             .json({ message: "you successfully login", data: result[0].n_id });
-        //  res.redirect("/userProfile/" + result[0].n_id);
+          //  res.redirect("/userProfile/" + result[0].n_id);
         } else {
           res.status(200).send("yoy have no right excess");
         }
@@ -90,7 +86,7 @@ exports.signInForUser = (req, res) => {
 exports.signUpForUser = (req, res) => {
   const nid = req.body.nid_value;
   console.log(req.body);
-  // console.log(req.body.mobile);
+  console.log(nid);
   pool.getConnection((err, connection) => {
     if (!err) {
       console.log("conected");
@@ -124,13 +120,10 @@ exports.signUpForUser = (req, res) => {
               //res.send(rows);
               if (!err) {
                 //res.redirect("/userProfile/" + nid);
-                  
+
                 res
-                .status(201)
-                .json({ message: "you successfully sign Up ", data: nid});
-                  
-                  
-                  
+                  .status(201)
+                  .json({ message: "you successfully sign Up ", data: nid });
               } else {
                 console.log(err);
               }
