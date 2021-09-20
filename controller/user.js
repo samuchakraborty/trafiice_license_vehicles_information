@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 
+const fileUpload = require("express-fileupload");
+app.use(fileUpload());
 const pool = require("../database/database.js");
 
 exports.getUserInformation = (req, res) => {
@@ -136,6 +138,62 @@ exports.signUpForUser = (req, res) => {
           }
         } else {
           console.log(err);
+        }
+      });
+    }
+  });
+};
+
+exports.applyForLicense = (req, res) => {
+  let samplefile;
+  let uploadPath;
+
+  if (!req.files || Object.keys(req.files).length === 0) {
+    return res.status(400).send("no file were uploaded");
+  }
+  samplefile = req.files.profileFile;
+  uploadPath = process.env.PWD + "/upload/" + samplefile.name;
+  console.log(samplefile);
+  var sql =
+    'INSERT INTO license (name, u_id, image, lc_no, lc_status ) VALUES ("' +
+    req.body.name +
+    '", "' +
+    req.body.uid +
+    '", "' +
+    samplefile.name +
+    '", "' +
+    req.body.lc_no +
+    '", "' +
+    req.body.lc_status +
+    '")';
+
+  console.log(uploadPath);
+  samplefile.mv(uploadPath, function (err) {
+    if (err) {
+      res.status(200).send(err);
+    } else {
+      pool.getConnection((err, connection) => {
+        if (!err) {
+          console.log("data base conected");
+          connection.query(sql, (err, rows) => {
+            connection.release();
+            if (!err) {
+              console.log(sql);
+              res.json({
+                msg: "All data insert successfully done",
+              });
+            } else {
+              res.json({
+                msg: err,
+                sql: sql,
+              });
+            }
+          });
+        } else {
+          res.json({
+            code: 300,
+            msg: "not yet sloved",
+          });
         }
       });
     }
