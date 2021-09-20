@@ -64,7 +64,7 @@ exports.signInForUser = (req, res) => {
     '" AND password= "' +
     password +
     '"';
-  // console.log(sqlforSignIn);
+  console.log(sqlforSignIn);
   pool.getConnection((err, connection) => {
     connection.query(sqlforSignIn, (err, result) => {
       if (!err) {
@@ -76,7 +76,10 @@ exports.signInForUser = (req, res) => {
             .json({ message: "you successfully login", data: result[0].n_id });
           //  res.redirect("/userProfile/" + result[0].n_id);
         } else {
-          res.status(200).send("yoy have no right excess");
+          res.status(200).json({
+            err: err,
+            msg: "yoy have no right excess",
+          });
         }
       } else {
         console.log(err);
@@ -143,7 +146,9 @@ exports.signUpForUser = (req, res) => {
     }
   });
 };
-
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
 exports.applyForLicense = (req, res) => {
   let samplefile;
   let uploadPath;
@@ -155,16 +160,22 @@ exports.applyForLicense = (req, res) => {
   uploadPath = process.env.PWD + "/upload/" + samplefile.name;
   console.log(samplefile);
   var sql =
-    'INSERT INTO license (name, u_id, image, lc_no, lc_status ) VALUES ("' +
-    req.body.name +
+    'INSERT INTO license (lc_type, u_id, image, lc_no, lc_status, user_type ,name, application_date) VALUES ("' +
+    req.body.lc_type +
     '", "' +
     req.body.uid +
     '", "' +
     samplefile.name +
     '", "' +
-    req.body.lc_no +
+    getRandomInt(100000000000000) +
     '", "' +
     req.body.lc_status +
+    '", "' +
+    req.body.user_type +
+    '", "' +
+    req.body.name +
+    '", "' +
+    req.body.application_date +
     '")';
 
   console.log(uploadPath);
