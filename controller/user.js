@@ -224,7 +224,7 @@ exports.addYourVechileNumber = (req, res) => {
   uploadPath = process.env.PWD + "/upload/" + samplefile.name;
   console.log(samplefile);
   var sql =
-    'INSERT INTO vehicles (national_id, u_id, image, vehicles_no, insurance_date, fitness_report_number ,insurnce_number, type) VALUES ("' +
+    'INSERT INTO vehicles (national_id, u_id, image, vehicles_no, insurance_date, fitness_report_number ,insurnce_number,type) VALUES ("' +
     req.body.n_id +
     '", "' +
     req.body.uid +
@@ -239,10 +239,10 @@ exports.addYourVechileNumber = (req, res) => {
     '", "' +
     req.body.insurance_number +
     '", "' +
-    req.body.type +
+    req.body.typeOfV +
     '")';
 
-  console.log(uploadPath);
+  console.log(sql);
   samplefile.mv(uploadPath, function (err) {
     if (err) {
       res.status(200).send(err);
@@ -274,4 +274,45 @@ exports.addYourVechileNumber = (req, res) => {
       });
     }
   });
+};
+
+
+
+exports.getVechileInformation = (req, res) => {
+
+
+
+  var sql ="SELECT * FROM vehicles where national_id ="+req.params.nid;
+
+  console.log(sql);
+ 
+      pool.getConnection((err, connection) => {
+        if (!err) {
+          console.log("data base conected");
+          connection.query(sql, (err, rows) => {
+            connection.release();
+            if (!err) {
+              console.log(sql);
+              res.json({
+                msg: "Vehicle Information done",
+                code: res.statusCode,
+                data: rows,
+              });
+            } else {
+              res.json({
+                msg: err,
+                code: res.statusCode,
+                sql: sql,
+              });
+            }
+          });
+        } else {
+          res.json({
+            code: 300,
+            msg: "not yet sloved",
+          });
+        }
+      });
+    
+ 
 };
