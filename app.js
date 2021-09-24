@@ -24,6 +24,7 @@ const pool = require("./database/database.js");
 app.post("/user/singup", user.signUpForUser);
 app.post("/user/signin", user.signInForUser);
 app.post("/user/applyLicense", user.applyForLicense);
+app.post('/user/addVechile', user.addYourVechileNumber);
 
 // app.get("/signIn", (req, res) => {
 //   res.render("signin");
