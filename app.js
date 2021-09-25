@@ -33,6 +33,7 @@ app.get("/user/userProfile/:nid", user.getUserInformation);
 
 app.post("/police/signIn", police.signInPolice);
 app.get("/police/getInformation/:batch_id", police.getPoliceInformation);
+app.get("/police/getLicense/:licenseNumber", police.getLicenseInformation);
 
 
 

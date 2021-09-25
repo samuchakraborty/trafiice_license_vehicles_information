@@ -115,13 +115,11 @@ exports.getPoliceInformation = (req, res) => {
         if (result.length != 0) {
           connection.query(sqlForNid, (err, resulOfNid) => {
             if (!err) {
-              res
-                .status(200)
-                .json({
-                  message: "you successfully login",
-                  data: result[0],
-                  policeInforMation: resulOfNid[0],
-                });
+              res.status(200).json({
+                message: "you successfully login",
+                data: result[0],
+                policeInforMation: resulOfNid[0],
+              });
             } else {
               res.status(200).json({
                 err: err,
@@ -135,6 +133,51 @@ exports.getPoliceInformation = (req, res) => {
           res.status(200).json({
             err: err,
             msg: "yoy have no right excess",
+          });
+        }
+      } else {
+        console.log(err);
+      }
+    });
+  });
+};
+
+exports.getLicenseInformation = (req, res) => {
+  const licenseNumber = req.params.licenseNumber;
+
+  //console.log("SELECT * FROM user WHERE mobile = '1837789993' AND password ='something' ");
+  const sqlforUserLicense =
+    'SELECT * FROM license where lc_no="' + licenseNumber + '"';
+  console.log(sqlforUserLicense);
+
+  pool.getConnection((err, connection) => {
+    connection.query(sqlforUserLicense, (err, result) => {
+      if (!err) {
+        console.log(result);
+         const sqlForUser = "SELECT * FROM user where id=" + result[0]["u_id"];
+        if (result.length != 0) {
+         
+          connection.query(sqlForUser, (err, resulOfUser) => {
+            if (!err) {
+                res.status(200).json({
+                    msg: "you successfully get data",
+                    licenseInformation: result[0],
+                      userInformation: resulOfUser[0],
+                  });
+            } else {
+              res.status(200).json({
+                err: err,
+                msg: "yoy have no right excess",
+              });
+            }
+          });
+        }
+        //  res.redirect("/userProfile/" + result[0].n_id);
+        else {
+          res.status(401).json({
+            code: res.statusCode,
+            Status: "This user have no license",
+            msg: "there is no License information",
           });
         }
       } else {
