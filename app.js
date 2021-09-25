@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const user = require("./controller/user");
 const ejs = require("ejs");
 const app = express();
-
+const police = require("./controller/police");
 const fileUpload = require("express-fileupload");
 
 app.use(fileUpload());
@@ -26,30 +26,16 @@ app.post("/user/signin", user.signInForUser);
 app.post("/user/applyLicense", user.applyForLicense);
 app.post('/user/addVechile', user.addYourVechileNumber);
 app.get('/user/getVechile/:nid', user.getVechileInformation);
+app.get("/user/userProfile/:nid", user.getUserInformation);
 // app.get("/signIn", (req, res) => {
 //   res.render("signin");
 // });
 
-app.get("/user/userProfile/:nid", user.getUserInformation);
+app.post("/police/signIn", police.signInPolice);
+app.get("/police/getInformation/:batch_id", police.getPoliceInformation);
 
-// app.get("/home", (req, res) => {
-//   pool.getConnection((err, connection) => {
-//     if (!err) {
-//       console.log("conected");
 
-//       connection.query("SELECT * FROM nid", (err, rows) => {
-//         connection.release();
-//         if (!err) {
-//           console.log(rows);
-//           res.render("index", { items: rows });
-//           connection.destroy();
-//         } else {
-//           console.log(err);
-//         }
-//       });
-//     }
-//   });
-// });
+
 
 app.listen(port, () => {
   console.log("listening to the server on port " + port);
