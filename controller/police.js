@@ -100,33 +100,46 @@ exports.signUpForPolice = (req, res) => {
   });
 };
 
-
 exports.getPoliceInformation = (req, res) => {
-    const batch_id = req.params.batch_id;
+  const batch_id = req.params.batch_id;
 
-    //console.log("SELECT * FROM user WHERE mobile = '1837789993' AND password ='something' ");
-    const sqlforSignIn =
-      'SELECT * FROM police_info where id="' +  batch_id +'"';
-    console.log(sqlforSignIn);
-    pool.getConnection((err, connection) => {
-      connection.query(sqlforSignIn, (err, result) => {
-        if (!err) {
-          console.log(result);
-  
-          if (result.length != 0) {
-            res
-              .status(200)
-              .json({ message: "you successfully login", data: result });
-            //  res.redirect("/userProfile/" + result[0].n_id);
-          } else {
-            res.status(200).json({
-              err: err,
-              msg: "yoy have no right excess",
-            });
-          }
-        } else {
-          console.log(err);
+  //console.log("SELECT * FROM user WHERE mobile = '1837789993' AND password ='something' ");
+  const sqlforSignIn = 'SELECT * FROM police_info where id="' + batch_id + '"';
+  console.log(sqlforSignIn);
+
+  pool.getConnection((err, connection) => {
+    connection.query(sqlforSignIn, (err, result) => {
+      if (!err) {
+        console.log(result);
+        const sqlForNid = "SELECT * FROM nid where n_id=" + result[0]["n_id"];
+        if (result.length != 0) {
+          connection.query(sqlForNid, (err, resulOfNid) => {
+            if (!err) {
+              res
+                .status(200)
+                .json({
+                  message: "you successfully login",
+                  data: result[0],
+                  policeInforMation: resulOfNid[0],
+                });
+            } else {
+              res.status(200).json({
+                err: err,
+                msg: "yoy have no right excess",
+              });
+            }
+          });
         }
-      });
+        //  res.redirect("/userProfile/" + result[0].n_id);
+        else {
+          res.status(200).json({
+            err: err,
+            msg: "yoy have no right excess",
+          });
+        }
+      } else {
+        console.log(err);
+      }
     });
-  };
+  });
+};
