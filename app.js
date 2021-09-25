@@ -30,11 +30,11 @@ app.get("/user/userProfile/:nid", user.getUserInformation);
 // app.get("/signIn", (req, res) => {
 //   res.render("signin");
 // });
-
+///v police
 app.post("/police/signIn", police.signInPolice);
 app.get("/police/getInformation/:batch_id", police.getPoliceInformation);
 app.get("/police/getLicense/:licenseNumber", police.getLicenseInformation);
-
+app.get("/police/getVechile", police.getVehicleInformation);
 
 
 
