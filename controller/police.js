@@ -42,66 +42,75 @@ exports.signInPolice = (req, res) => {
 };
 
 exports.signUpForPolice = (req, res) => {
-  const nid = req.body.nid_value;
+  const batch_id = req.query.batchId;
   console.log(req.body);
-  console.log(nid);
+  // console.log(nid);
   pool.getConnection((err, connection) => {
     if (!err) {
       console.log("conected");
 
-      connection.query("SELECT * FROM nid where n_id=" + nid, (err, rows) => {
-        connection.release();
-        if (!err) {
-          console.log(rows);
-          // res.render("index", { items: rows });
-          if (rows.length != 0) {
-            // res.json({
+      connection.query(
+        "SELECT * FROM police_info where id=" + batch_id,
+        (err, resultOfPolice) => {
+          connection.release();
+          if (!err) {
+            console.log(resultOfPolice);
+            // res.render("index", { items: rows });
+            if (resultOfPolice.length != 0) {
+              // res.json({
 
-            //   status: 200,
-            //   message: "Nid value match",
-            //   data: rows
-            // });
-            var sql =
-              'INSERT INTO user (u_name, mobile, password, n_id ) VALUES ("' +
-              rows[0].first_name +
-              " " +
-              rows[0].last_name +
-              '", "' +
-              req.body.mobile +
-              '", "' +
-              req.body.password +
-              '", "' +
-              nid +
-              '")';
-            console.log(sql);
-            connection.query(sql, (err, rows) => {
-              //res.send(rows);
-              if (!err) {
-                //res.redirect("/userProfile/" + nid);
+              //   status: 200,
+              //   message: "Nid value match",
+              //   data: rows
+              // });
+              var sql =
+                'INSERT INTO police (police_batch_id, mobile, password, n_id ) VALUES ("' +
+                batch_id +
+                '", "' +
+                req.query.mobile +
+                '", "' +
+                req.query.password +
+                '", "' +
+                resultOfPolice[0]["n_id"] +
+                '")';
+              console.log(sql);
 
-                res
-                  .status(201)
-                  .json({ message: "you successfully sign Up ", data: nid });
-              } else {
-                console.log(err);
-              }
-            });
+              // res
+              //   .status(201)
+              //   .json({ message: "you successfully sign Up ", data: sql });
+
+              connection.query(sql, (err, rows) => {
+                //res.send(rows);
+                if (!err) {
+                  //res.redirect("/userProfile/" + nid);
+
+                  res
+                    .status(201)
+                    .json({ message: "you successfully sign Up ", data: rows,
+                  policeId: resultOfPolice[0]["id"]
+                  
+                  });
+                } else {
+                  console.log(err);
+                }
+              });
+            } else {
+              res.json({
+                status: 404,
+                message: "Nid value not match",
+              });
+            }
           } else {
-            res.json({
-              status: 404,
-              message: "Nid value not match",
-            });
+            console.log(err);
           }
-        } else {
-          console.log(err);
         }
-      });
+      );
     }
   });
 };
 
 exports.getPoliceInformation = (req, res) => {
-  const batch_id = req.params.batch_id;
+  const batch_id = req.query.batchId;
 
   //console.log("SELECT * FROM user WHERE mobile = '1837789993' AND password ='something' ");
   const sqlforSignIn = 'SELECT * FROM police_info where id="' + batch_id + '"';
@@ -118,7 +127,7 @@ exports.getPoliceInformation = (req, res) => {
               res.status(200).json({
                 message: "you successfully login",
                 data: result[0],
-                policeInforMation: resulOfNid[0],
+                policeInformation: resulOfNid[0],
               });
             } else {
               res.status(200).json({
@@ -143,7 +152,7 @@ exports.getPoliceInformation = (req, res) => {
 };
 
 exports.getLicenseInformation = (req, res) => {
-  const licenseNumber = req.params.licenseNumber;
+  const licenseNumber = req.query.license;
 
   //console.log("SELECT * FROM user WHERE mobile = '1837789993' AND password ='something' ");
   const sqlforUserLicense =
@@ -154,16 +163,15 @@ exports.getLicenseInformation = (req, res) => {
     connection.query(sqlforUserLicense, (err, result) => {
       if (!err) {
         console.log(result);
-         const sqlForUser = "SELECT * FROM user where id=" + result[0]["u_id"];
+        const sqlForUser = "SELECT * FROM user where id=" + result[0]["u_id"];
         if (result.length != 0) {
-         
           connection.query(sqlForUser, (err, resulOfUser) => {
             if (!err) {
-                res.status(200).json({
-                    msg: "you successfully get data",
-                    licenseInformation: result[0],
-                      userInformation: resulOfUser[0],
-                  });
+              res.status(200).json({
+                msg: "you successfully get data",
+                licenseInformation: result[0],
+                userInformation: resulOfUser[0],
+              });
             } else {
               res.status(200).json({
                 err: err,
@@ -187,9 +195,6 @@ exports.getLicenseInformation = (req, res) => {
   });
 };
 
-
-
-
 exports.getVehicleInformation = (req, res) => {
   const vehicleNumber = req.query.vc;
 
@@ -202,16 +207,15 @@ exports.getVehicleInformation = (req, res) => {
     connection.query(sqlforUserLicense, (err, result) => {
       if (!err) {
         console.log(result);
-         const sqlForUser = "SELECT * FROM user where id=" + result[0]["u_id"];
+        const sqlForUser = "SELECT * FROM user where id=" + result[0]["u_id"];
         if (result.length != 0) {
-         
           connection.query(sqlForUser, (err, resulOfUser) => {
             if (!err) {
-                res.status(200).json({
-                    msg: "you successfully get data",
-                    vehicleInformation: result[0],
-                      userInformation: resulOfUser[0],
-                  });
+              res.status(200).json({
+                msg: "you successfully get data",
+                vehicleInformation: result[0],
+                userInformation: resulOfUser[0],
+              });
             } else {
               res.status(200).json({
                 err: err,

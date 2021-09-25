@@ -17,24 +17,23 @@ app.use(express.static("images"));
 app.use(express.static("upload"));
 const pool = require("./database/database.js");
 
-// app.get("", (req, res) => {
-//  // res.render("home");
-// });
 
+///api  user
 app.post("/user/singup", user.signUpForUser);
 app.post("/user/signin", user.signInForUser);
 app.post("/user/applyLicense", user.applyForLicense);
 app.post('/user/addVechile', user.addYourVechileNumber);
 app.get('/user/getVechile/:nid', user.getVechileInformation);
 app.get("/user/userProfile/:nid", user.getUserInformation);
-// app.get("/signIn", (req, res) => {
-//   res.render("signin");
-// });
-///v police
+
+
+
+///api police
 app.post("/police/signIn", police.signInPolice);
-app.get("/police/getInformation/:batch_id", police.getPoliceInformation);
-app.get("/police/getLicense/:licenseNumber", police.getLicenseInformation);
-app.get("/police/getVechile", police.getVehicleInformation);
+app.post("/police/signUp", police.signUpForPolice);
+app.get("/police/getInformation", police.getPoliceInformation);
+app.get("/police/getLicense", police.getLicenseInformation);
+app.get("/police/getVehicle", police.getVehicleInformation);
 
 
 
