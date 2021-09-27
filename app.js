@@ -5,6 +5,7 @@ const user = require("./controller/user");
 const ejs = require("ejs");
 const app = express();
 const police = require("./controller/police");
+const admin = require("./controller/admin");
 const fileUpload = require("express-fileupload");
 
 app.use(fileUpload());
@@ -34,6 +35,13 @@ app.post("/police/signUp", police.signUpForPolice);
 app.get("/police/getInformation", police.getPoliceInformation);
 app.get("/police/getLicense", police.getLicenseInformation);
 app.get("/police/getVehicle", police.getVehicleInformation);
+
+
+
+//api admin
+app.get("/admin/user", admin.getLicenseInformation);
+
+app.get("/admin/vehicle", admin.getVehicleInformation);
 
 
 
