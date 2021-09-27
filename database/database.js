@@ -22,7 +22,7 @@ const connection = mysql.createPool({
 connection.getConnection((err, connection) => {
   if (!err) {
     //connection.release();
-    console.log("conected");
+    console.log("database conected");
   } else {
     console.log("not conected");
     console.log(err);

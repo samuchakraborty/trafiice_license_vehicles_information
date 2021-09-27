@@ -84,11 +84,10 @@ exports.signUpForPolice = (req, res) => {
                 if (!err) {
                   //res.redirect("/userProfile/" + nid);
 
-                  res
-                    .status(201)
-                    .json({ message: "you successfully sign Up ", data: rows,
-                  policeId: resultOfPolice[0]["id"]
-                  
+                  res.status(201).json({
+                    message: "you successfully sign Up ",
+                    data: rows,
+                    policeId: resultOfPolice[0]["id"],
                   });
                 } else {
                   console.log(err);
@@ -163,29 +162,33 @@ exports.getLicenseInformation = (req, res) => {
     connection.query(sqlforUserLicense, (err, result) => {
       if (!err) {
         console.log(result);
-        const sqlForUser = "SELECT * FROM user where id=" + result[0]["u_id"];
         if (result.length != 0) {
+          const sqlForUser = "SELECT * FROM user where id=" + result[0]["u_id"];
+
           connection.query(sqlForUser, (err, resulOfUser) => {
             if (!err) {
               res.status(200).json({
-                msg: "you successfully get data",
-                licenseInformation: result[0],
-                userInformation: resulOfUser[0],
+                msg: "License Found",
+                licenseInformation: result,
+                userInformation: resulOfUser,
               });
             } else {
+              console.log("404" + sqlforUserLicense);
+
               res.status(200).json({
-                err: err,
-                msg: "yoy have no right excess",
+                msg: "License not found",
+                licenseInformation: [],
+                userInformation: [],
               });
             }
           });
         }
         //  res.redirect("/userProfile/" + result[0].n_id);
         else {
-          res.status(401).json({
-            code: res.statusCode,
-            Status: "This user have no license",
-            msg: "there is no License information",
+          res.status(200).json({
+            msg: "License not found",
+            licenseInformation: [],
+            userInformation: [],
           });
         }
       } else {
@@ -201,35 +204,47 @@ exports.getVehicleInformation = (req, res) => {
   //console.log("SELECT * FROM user WHERE mobile = '1837789993' AND password ='something' ");
   const sqlforUserLicense =
     'SELECT * FROM vehicles where vehicles_no="' + vehicleNumber + '"';
-  console.log(sqlforUserLicense);
 
   pool.getConnection((err, connection) => {
     connection.query(sqlforUserLicense, (err, result) => {
       if (!err) {
+        console.log(sqlforUserLicense);
         console.log(result);
-        const sqlForUser = "SELECT * FROM user where id=" + result[0]["u_id"];
+
         if (result.length != 0) {
+          const sqlForUser = "SELECT * FROM user where id=" + result[0]["u_id"];
+
           connection.query(sqlForUser, (err, resulOfUser) => {
             if (!err) {
-              res.status(200).json({
-                msg: "you successfully get data",
-                vehicleInformation: result[0],
-                userInformation: resulOfUser[0],
+              const sqlForuserImage =
+                "SELECT * FROM nid where n_id=" + result[0]["national_id"];
+
+              connection.query(sqlForuserImage, (err, resulOfUserimage) => {
+                res.status(200).json({
+                  msg: "Vehicle is found",
+                  vehicleInformation: result,
+                  userInformation: resulOfUser,
+                  userImage: resulOfUserimage
+                });
               });
             } else {
               res.status(200).json({
-                err: err,
-                msg: "yoy have no right excess",
+                msg: "you have no right excess",
+                vehicleInformation: [],
+                userInformation: [],
+                userImage: []
               });
             }
           });
         }
         //  res.redirect("/userProfile/" + result[0].n_id);
         else {
-          res.status(401).json({
-            code: res.statusCode,
-            Status: "This user have no license",
-            msg: "there is no License information",
+          console.log("404" + sqlforUserLicense);
+          res.status(200).json({
+            msg: "Vehicile not found",
+            vehicleInformation: [],
+            userInformation: [],
+            userImage: []
           });
         }
       } else {
