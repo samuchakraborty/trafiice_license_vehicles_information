@@ -276,43 +276,74 @@ exports.addYourVechileNumber = (req, res) => {
   });
 };
 
-
-
 exports.getVechileInformation = (req, res) => {
-
-
-
-  var sql ="SELECT * FROM vehicles where national_id ="+req.params.nid;
+  var sql = "SELECT * FROM vehicles where national_id =" + req.params.nid;
 
   console.log(sql);
- 
-      pool.getConnection((err, connection) => {
+
+  pool.getConnection((err, connection) => {
+    if (!err) {
+      console.log("data base conected");
+      connection.query(sql, (err, rows) => {
+        connection.release();
         if (!err) {
-          console.log("data base conected");
-          connection.query(sql, (err, rows) => {
-            connection.release();
-            if (!err) {
-              console.log(sql);
-              res.json({
-                msg: "Vehicle Information done",
-                code: res.statusCode,
-                data: rows,
-              });
-            } else {
-              res.json({
-                msg: err,
-                code: res.statusCode,
-                sql: sql,
-              });
-            }
+          console.log(sql);
+          res.json({
+            msg: "Vehicle Information done",
+            code: res.statusCode,
+            data: rows,
           });
         } else {
           res.json({
-            code: 300,
-            msg: "not yet sloved",
+            msg: err,
+            code: res.statusCode,
+            sql: sql,
           });
         }
       });
-    
- 
+    } else {
+      res.json({
+        code: 300,
+        msg: "not yet sloved",
+      });
+    }
+  });
+};
+
+exports.paymentStatus = (req, res) => {
+  const id = req.query.userId;
+  console.log(id);
+  var sql =
+    "SELECT * FROM user RIGHT JOIN taxes ON user.id = taxes.u_id WHERE user.id =" +
+    id;
+
+  console.log(sql);
+
+  pool.getConnection((err, connection) => {
+    if (!err) {
+      console.log("data base conected");
+      connection.query(sql, (err, rows) => {
+        connection.release();
+        if (!err) {
+          console.log(sql);
+          res.json({
+            msg: "Vehicle Information done",
+            code: res.statusCode,
+            data: rows,
+          });
+        } else {
+          res.json({
+            msg: err,
+            code: res.statusCode,
+            sql: sql,
+          });
+        }
+      });
+    } else {
+      res.json({
+        code: 300,
+        msg: "not yet sloved",
+      });
+    }
+  });
 };
