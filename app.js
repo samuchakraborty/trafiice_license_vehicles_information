@@ -44,6 +44,10 @@ app.get("/admin/user", admin.getLicenseInformation);
 
 app.get("/admin/vehicle", admin.getVehicleInformation);
 
+app.post("/admin/login", admin.signInForAdmin);
+
+app.post("/admin/updateLicense", admin.updateLicenseInformation);
+
 
 
 app.listen(port, () => {
