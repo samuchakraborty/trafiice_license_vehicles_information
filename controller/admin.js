@@ -143,10 +143,20 @@ exports.signInForAdmin = (req, res) => {
 exports.updateLicenseInformation = (req, res) => {
   const licenseNumber = req.query.license;
   const active = "Active";
+  const dateTimeOfLicenseExpireDate =
+    req.query.licenseExpireDate === undefined
+      ? null
+      : req.query.licenseExpireDate;
+
+  // const dateTimeOfLicenseNumber = req.query.licenseExpireDate === 'undefined' ? null: ;
   //console.log("SELECT * FROM user WHERE mobile = '1837789993' AND password ='something' ");
-  var sql = "UPDATE license SET lc_status='Active' WHERE lc_no=" + licenseNumber;
+  var sql =
+    "UPDATE license SET lc_status='Active',lc_issue_date=" +
+    dateTimeOfLicenseExpireDate +
+    " WHERE lc_no=" +
+    licenseNumber;
   console.log(sql);
-  // res.send(sql);
+  //res.send(sql);
   pool.getConnection((err, connection) => {
     connection.query(sql, (err, result) => {
       if (!err) {
