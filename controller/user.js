@@ -159,7 +159,7 @@ exports.applyForLicense = (req, res) => {
   }
   samplefile = req.files.profileFile;
   uploadPath = process.env.PWD + "/upload/" + samplefile.name;
-  console.log(samplefile);
+  //console.log(req.query);
   var sql =
     'INSERT INTO license (lc_type, u_id, image, lc_no, lc_status, user_type ,name, application_date) VALUES ("' +
     req.body.lc_type +
