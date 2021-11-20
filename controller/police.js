@@ -43,67 +43,68 @@ exports.signInPolice = (req, res) => {
 
 exports.signUpForPolice = (req, res) => {
   const batch_id = req.query.batchId;
-  console.log(req.body);
+  console.log(req.query);
   // console.log(nid);
   pool.getConnection((err, connection) => {
     if (!err) {
       console.log("conected");
+      let sqlForPolice =
+        "SELECT * FROM police_info where id=" + req.query.batchId;
+      connection.query(sqlForPolice, (err, resultOfPolice) => {
+        connection.release();
+        if (!err) {
+          console.log("/////////////");
+          console.log(resultOfPolice[0]['n_id']);
+          // res.render("index", { items: rows });
+          if (resultOfPolice.length != 0) {
+            // res.json({
 
-      connection.query(
-        "SELECT * FROM police_info where id=" + batch_id,
-        (err, resultOfPolice) => {
-          connection.release();
-          if (!err) {
-            console.log(resultOfPolice);
-            // res.render("index", { items: rows });
-            if (resultOfPolice.length != 0) {
-              // res.json({
+            //   status: 200,
+            //   message: "Nid value match",
+            //   data: rows
+            // });
+            var sql =
+              'INSERT INTO police (police_batch_id, mobile, password, n_id ) VALUES ("' +
+              batch_id +
+              '", "' +
+              req.query.mobile +
+              '", "' +
+              req.query.password +
+              '", "' +
+              resultOfPolice[0]['n_id'] +
+              '")';
+            console.log(sql);
 
-              //   status: 200,
-              //   message: "Nid value match",
-              //   data: rows
-              // });
-              var sql =
-                'INSERT INTO police (police_batch_id, mobile, password, n_id ) VALUES ("' +
-                batch_id +
-                '", "' +
-                req.query.mobile +
-                '", "' +
-                req.query.password +
-                '", "' +
-                resultOfPolice[0]["n_id"] +
-                '")';
+            // res
+            //   .status(201)
+            //   .json({ message: "you successfully sign Up ", data: sql });
+
+            connection.query(sql, (err, rows) => {
               console.log(sql);
+              console.log('data');
+              //res.send(rows);
+              if (!err) {
+                //res.redirect("/userProfile/" + nid);
 
-              // res
-              //   .status(201)
-              //   .json({ message: "you successfully sign Up ", data: sql });
-
-              connection.query(sql, (err, rows) => {
-                //res.send(rows);
-                if (!err) {
-                  //res.redirect("/userProfile/" + nid);
-
-                  res.status(201).json({
-                    message: "you successfully sign Up ",
-                    data: rows,
-                    policeId: resultOfPolice[0]["id"],
-                  });
-                } else {
-                  console.log(err);
-                }
-              });
-            } else {
-              res.json({
-                status: 404,
-                message: "Nid value not match",
-              });
-            }
+                res.status(201).json({
+                  message: "you successfully sign Up ",
+                 // data: rows,
+                  policeId: resultOfPolice[0]['id'],
+                });
+              } else {
+                console.log(err);
+              }
+            });
           } else {
-            console.log(err);
+            res.json({
+              status: 404,
+              message: "Nid value not match",
+            });
           }
+        } else {
+          console.log(err);
         }
-      );
+      });
     }
   });
 };
@@ -224,7 +225,7 @@ exports.getVehicleInformation = (req, res) => {
                   msg: "Vehicle is found",
                   vehicleInformation: result,
                   userInformation: resulOfUser,
-                  userImage: resulOfUserimage
+                  userImage: resulOfUserimage,
                 });
               });
             } else {
@@ -232,7 +233,7 @@ exports.getVehicleInformation = (req, res) => {
                 msg: "you have no right excess",
                 vehicleInformation: [],
                 userInformation: [],
-                userImage: []
+                userImage: [],
               });
             }
           });
@@ -244,7 +245,7 @@ exports.getVehicleInformation = (req, res) => {
             msg: "Vehicile not found",
             vehicleInformation: [],
             userInformation: [],
-            userImage: []
+            userImage: [],
           });
         }
       } else {
