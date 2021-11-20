@@ -37,6 +37,7 @@ app.post("/police/signUp", police.signUpForPolice);
 app.get("/police/getInformation", police.getPoliceInformation);
 app.get("/police/getLicense", police.getLicenseInformation);
 app.get("/police/getVehicle", police.getVehicleInformation);
+app.get('/police/getStolen', police.getStolenVehcileInformation);
 
 
 

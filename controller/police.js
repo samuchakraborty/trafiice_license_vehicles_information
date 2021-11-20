@@ -254,3 +254,39 @@ exports.getVehicleInformation = (req, res) => {
     });
   });
 };
+
+
+exports.getStolenVehcileInformation = (req, res) => {
+ // const batch_id = req.query.batchId;
+
+  //console.log("SELECT * FROM user WHERE mobile = '1837789993' AND password ='something' ");
+  const sql = 'SELECT * FROM stolen_vechile';
+//  console.log(sqlforSignIn);
+
+  pool.getConnection((err, connection) => {
+    connection.query(sql, (err, result) => {
+      if (!err) {
+        console.log(result);
+       if (result.length != 0) {
+        
+              res.status(200).json({
+                message: "Stolen Vehcile Information get",
+                data: result,
+               // policeInformation: resulOfNid[0],
+              });
+            } else {
+              res.status(200).json({
+                err: err,
+                msg: "yoy have no right excess",
+              });
+            }
+          }else{
+            console.log({err: err});
+          }
+          });
+      
+        //  res.redirect("/userProfile/" + result[0].n_id);
+     
+    });
+  
+};
