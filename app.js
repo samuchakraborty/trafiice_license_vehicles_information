@@ -26,7 +26,8 @@ app.post("/user/applyLicense", user.applyForLicense);
 app.post('/user/addVechile', user.addYourVechileNumber);
 app.get('/user/getVechile/:nid', user.getVechileInformation);
 app.get("/user/userProfile/:nid", user.getUserInformation);
-app.get("/user/userPayment", user.paymentStatus);
+app.post("/user/userPayment", user.paymentStatus);
+app.post("/user/userReport", user.stolenVehicle);
 
 
 

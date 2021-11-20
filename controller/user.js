@@ -315,9 +315,11 @@ exports.getVechileInformation = (req, res) => {
 exports.paymentStatus = (req, res) => {
   const id = req.query.userId;
   console.log(id);
-  var sql =
-    "SELECT * FROM user RIGHT JOIN taxes ON user.id = taxes.u_id WHERE user.id =" +
-    id;
+  // var sql =
+  //   "SELECT * FROM user RIGHT JOIN taxes ON user.id = taxes.u_id WHERE user.id =" +
+  //   id;
+
+  var sql = "UPDATE taxes SET tax_status='Paid' WHERE id=" + id;
 
   console.log(sql);
 
@@ -329,7 +331,54 @@ exports.paymentStatus = (req, res) => {
         if (!err) {
           console.log(sql);
           res.json({
-            msg: "Vehicle Information done",
+            msg: "Your Payment is Done",
+            code: res.statusCode,
+            data: rows,
+          });
+        } else {
+          res.json({
+            msg: err,
+            code: res.statusCode,
+            sql: sql,
+          });
+        }
+      });
+    } else {
+      res.json({
+        code: 300,
+        msg: "not yet sloved",
+      });
+    }
+  });
+};
+
+
+exports.stolenVehicle = (req, res) => {
+  const id = req.query.n_id;
+  console.log(id);
+  // var sql =
+  //   "SELECT * FROM user RIGHT JOIN taxes ON user.id = taxes.u_id WHERE user.id =" +
+  //   id;
+
+  var sql =
+    'INSERT INTO stolen_vechile (address, n_id,vehicle_no) VALUES ("' +
+    req.body.address +
+    '", "' +
+    req.body.n_id +
+    '", "' +
+    req.body.vehicles_no +
+    '")';
+  console.log(sql);
+
+  pool.getConnection((err, connection) => {
+    if (!err) {
+      console.log("data base conected");
+      connection.query(sql, (err, rows) => {
+        connection.release();
+        if (!err) {
+          console.log(sql);
+          res.json({
+            msg: "Your Report  is Recorded",
             code: res.statusCode,
             data: rows,
           });
