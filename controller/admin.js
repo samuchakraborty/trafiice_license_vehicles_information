@@ -201,3 +201,60 @@ exports.updateLicenseInformation = (req, res) => {
     });
   });
 };
+exports.sendExamDate = (req, res) => {
+  let examDate = req.query.examDate;
+  const licenseNumber = req.query.license;
+
+  // const dateTimeOfLicenseNumber = req.query.licenseExpireDate === 'undefined' ? null: ;
+  //console.log("SELECT * FROM user WHERE mobile = '1837789993' AND password ='something' ");
+  var sql =
+    "UPDATE license SET exam_date=" +
+    examDate +
+    " WHERE lc_no=" +
+    licenseNumber;
+  console.log(sql);
+  //res.send(sql);
+  pool.getConnection((err, connection) => {
+    connection.query(sql, (err, result) => {
+      if (!err) {
+        res.status(200).json({
+          msg: "Update User License",
+          license: result,
+        });
+
+        //   console.log(result);
+        //   if (result.length != 0) {
+        //     const sqlForUser = "SELECT * FROM user where id=" + result[0]["u_id"];
+
+        //     connection.query(sqlForUser, (err, resulOfUser) => {
+        //       if (!err) {
+        //         res.status(200).json({
+        //           msg: "License Found",
+        //           licenseInformation: result,
+        //           userInformation: resulOfUser,
+        //         });
+        //       } else {
+        //         console.log("404" + sqlforUserLicense);
+
+        //         res.status(200).json({
+        //           msg: "License not found",
+        //           licenseInformation: [],
+        //           userInformation: [],
+        //         });
+        //       }
+        //     });
+        //   }
+        //   //  res.redirect("/userProfile/" + result[0].n_id);
+        //   else {
+        //     res.status(200).json({
+        //       msg: "License not found",
+        //       licenseInformation: [],
+        //       userInformation: [],
+        //     });
+        //   }
+      } else {
+        console.log(err);
+      }
+    });
+  });
+};

@@ -50,6 +50,7 @@ app.post("/admin/login", admin.signInForAdmin);
 
 app.post("/admin/updateLicense", admin.updateLicenseInformation);
 
+app.post("/admin/examDate", admin.sendExamDate);
 
 
 app.listen(port, () => {
